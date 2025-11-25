@@ -1,0 +1,42 @@
+import pygame
+
+class ScrollBar:
+    def __init__(self, x, y, h, thumb_h=120,
+                 thumb_color=(255, 255, 255)):
+        self.x = x
+        self.y = y
+        self.h = h
+        self.w = 20 
+
+        self.thumb_h = thumb_h
+        self.thumb_y = y
+
+        self.thumb_color = thumb_color
+
+        self.dragging = False
+        self.scroll_percent = 0
+
+    def handle_event(self, event):
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            mx, my = event.pos
+            if (self.x <= mx <= self.x + self.w and
+                self.thumb_y <= my <= self.thumb_y + self.thumb_h):
+                self.dragging = True
+
+
+        if event.type == pygame.MOUSEBUTTONUP:
+            self.dragging = False
+
+        if event.type == pygame.MOUSEMOTION and self.dragging:
+            mx, my = event.pos
+            self.thumb_y = max(
+                self.y,
+                min(my - self.thumb_h // 2,
+                    self.y + self.h - self.thumb_h)
+            )
+            self.scroll_percent = (self.thumb_y - self.y) / (self.h - self.thumb_h)
+
+    def draw(self, screen):
+        # Draw ONLY the white scroll thumb
+        pygame.draw.rect(screen, self.thumb_color,
+                         (self.x, self.thumb_y, self.w, self.thumb_h))
