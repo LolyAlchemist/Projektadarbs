@@ -1,4 +1,5 @@
 import pygame
+from scrollbar import ScrollBar
 import os
 import button
 from grid import Grid
@@ -9,6 +10,7 @@ pygame.init()
 
 SCREEN_WIDTH = 1200
 SCREEN_HEIGHT = 900
+SCROLL_HEIGHT = 2000 
 game_font = pygame.font.SysFont(name="Lora", size=50)
 game_font2 = pygame.font.SysFont(name="Lora", size=25)
 
@@ -28,20 +30,27 @@ back_button = button.Button(300, 500, back_img, 1.5)
 state = "menu"
 run = True
 
-while run:
+scrollbar = ScrollBar(1150, 0, SCREEN_HEIGHT)
 
+scroll = pygame.Surface((SCREEN_WIDTH, SCROLL_HEIGHT))
+
+scroll_offset = 0
+
+while run:
     for event in pygame.event.get():
+        scrollbar.handle_event(event)
+
         if event.type == pygame.QUIT:
             run = False
 
         if state == "game" and event.type == pygame.MOUSEBUTTONDOWN and event.button == 1 and not grid.win:
             pos = pygame.mouse.get_pos()
+            pos = (pos[0], pos[1] + scroll_offset)
             grid.get_mouse_click(pos[0], pos[1])
+
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_SPACE and grid.win:
                 grid.restart()
-
-
 
     if state == "menu":
         screen.fill((202, 228, 241))
@@ -51,17 +60,25 @@ while run:
             run = False
 
     elif state == "game":
-        screen.fill((0, 0, 0))
-        grid.draw_all(pygame, screen)
-        if back_button.draw(screen):
-            state = "menu"
+        scroll.fill((0, 0, 0))
+        grid.draw_all(pygame, scroll)
+        back_button.draw(scroll)
+        
 
         if grid.win:
-            won_surface = game_font.render("Tu uzvarēji!", False, (0,255,0))
-            screen.blit(won_surface, (956,650))
+            won_surface = game_font.render("Tu uzvarēji!", False, (0, 255, 0))
+            scroll.blit(won_surface, (956, 650))
 
-            press_space_surf = game_font2.render("Spied space, lai restartētu.", False, (0,255,200))
-            screen.blit(press_space_surf, (920, 750))
+            press_space_surf = game_font2.render("Spied space, lai restartētu.", False, (0, 255, 200))
+            scroll.blit(press_space_surf, (920, 750))
+
+        scroll_offset = int(scrollbar.scroll_percent * (SCROLL_HEIGHT - SCREEN_HEIGHT))
+
+        screen.blit(scroll, (0, -scroll_offset))
+
+        scrollbar.draw(screen)
+
+
 
     pygame.display.update()
 
