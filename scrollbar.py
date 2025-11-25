@@ -37,6 +37,5 @@ class ScrollBar:
             self.scroll_percent = (self.thumb_y - self.y) / (self.h - self.thumb_h)
 
     def draw(self, screen):
-        # Draw ONLY the white scroll thumb
         pygame.draw.rect(screen, self.thumb_color,
                          (self.x, self.thumb_y, self.w, self.thumb_h))
