@@ -9,8 +9,8 @@ os.environ["SDL_VIDEO_WINDOW_POS"] = "%d,%d" % (200, 200)
 pygame.init()
 
 SCREEN_WIDTH = 1200
-SCREEN_HEIGHT = 900
-SCROLL_HEIGHT = 2000 
+SCREEN_HEIGHT = 1000
+SCROLL_HEIGHT = 1200
 game_font = pygame.font.SysFont(name="Lora", size=50)
 game_font2 = pygame.font.SysFont(name="Lora", size=25)
 
@@ -73,9 +73,7 @@ while run:
             scroll.blit(press_space_surf, (920, 750))
 
         scroll_offset = int(scrollbar.scroll_percent * (SCROLL_HEIGHT - SCREEN_HEIGHT))
-
         screen.blit(scroll, (0, -scroll_offset))
-
         scrollbar.draw(screen)
 
 
