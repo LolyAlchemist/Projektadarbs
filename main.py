@@ -21,10 +21,12 @@ pygame.display.set_caption("HHHHHH")
 
 start_img = pygame.image.load("START_BUTTON.png").convert_alpha()
 quit_img = pygame.image.load("QUIT_BUTTON.png").convert_alpha()
+tuto_img = pygame.image.load("BACK_BUTTON.png").convert_alpha()
 back_img = pygame.image.load("BACK_BUTTON.png").convert_alpha()
 
 start_button = button.Button(300, 150, start_img, 1.5)
 quit_button = button.Button(300, 300, quit_img, 1.5)
+tuto_button = button.Button(300, 500, tuto_img, 1.5)
 back_button = button.Button(300, 500, back_img, 1.5)
 
 state = "menu"
@@ -51,20 +53,6 @@ while run:
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_SPACE and grid.win:
                 grid.restart()
-
-    if state == "menu":
-        screen.fill((202, 228, 241))
-        if start_button.draw(screen):
-            state = "game"
-        if quit_button.draw(screen):
-            run = False
-
-    elif state == "game":
-        scroll.fill((0, 0, 0))
-        grid.draw_all(pygame, scroll)
-        back_button.draw(scroll)
-        
-
         if grid.win:
             won_surface = game_font.render("Tu uzvarēji!", False, (0, 255, 0))
             scroll.blit(won_surface, (956, 650))
@@ -75,6 +63,46 @@ while run:
         scroll_offset = int(scrollbar.scroll_percent * (SCROLL_HEIGHT - SCREEN_HEIGHT))
         screen.blit(scroll, (0, -scroll_offset))
         scrollbar.draw(screen)
+
+    if state == "menu":
+        screen.fill((202, 228, 241))
+        if start_button.draw(screen):
+            state = "game"
+        if tuto_button.draw(screen):
+            state = "tutorial"
+        if quit_button.draw(screen):
+            run = False
+
+    elif state == "game":
+        scroll.fill((0, 0, 0))
+        grid.draw_all(pygame, scroll)
+
+    elif state == "tutorial":
+        scroll.fill((255,255,255))
+        text = [
+    "NOTEIKUMI:",
+    "* Spēkā ir parastie sudoku noteikumi.",
+    "* Zem sudoku ir teksts, kurš informē — kurā kolonnā un rindā ir bomba.",
+    "* Zem bombas lokācijas informācijas jāievada pareizais cipars.",
+    "",
+    "BOMBAS LOKĀCIJA:",
+    "Kolonna: ____",
+    "Rinda: ____",
+    "",
+    "PAREIZAIS CIPARS (BOMBA):",
+    "____"
+    ]
+        font = pygame.font.SysFont("Arial", 25)
+        y = 20
+
+        for line in text:
+            surface = font.render(line, True, (0, 0, 0))
+            scroll.blit(surface, (20, y))
+            y += 35
+        if back_button.draw(scroll):
+            state = "menu"
+    pygame.display.flip()
+
 
 
 
