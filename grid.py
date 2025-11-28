@@ -5,13 +5,13 @@ from copy import deepcopy
 
 def create_line_coordinates(cell_size: int) -> list[list[tuple]]:
     points = []
-    for y in range(1, 10):
+    for y in range(0, 10):
         temp = []
         temp.append((0, y * cell_size))
         temp.append((900, y * cell_size))
         points.append(temp)
 
-    for x in range(1, 10):
+    for x in range(0, 10):
         temp = []
         temp.append((x * cell_size, 0))
         temp.append((x *cell_size, 900))
@@ -113,11 +113,13 @@ class Grid:
         
     def __draw_lines(self, pg, surface) -> None:
         for index, point in enumerate(self.line_coordinates):
-            pg.draw.line(surface, (126, 39, 150), point[0], point[1])
-            if index == 2 or index == 5 or index == 10 or index == 13:
-                pg.draw.line(surface,(255,255,255), point[0], point[1])
+
+            if index in (3, 6, 13, 16): 
+                color = (255, 255, 255)
             else:
-                pg.draw.line(surface, (126, 39, 150), point[0], point[1])
+                color = (126, 39, 150)
+
+            pg.draw.line(surface, color, point[0], point[1])
 
     def __draw_numbers(self, surface) -> None:
         for y in range(len(self.grid)):
