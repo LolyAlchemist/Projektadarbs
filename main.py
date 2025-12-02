@@ -4,7 +4,7 @@ import os
 import button
 from grid import Grid
 
-os.environ["SDL_VIDEO_WINDOW_POS"] = "%d,%d" % (200, 200)
+os.environ["SDL_VIDEO_WINDOW_POS"] = "%d,%d" % (200, 25)
 
 pygame.init()
 
