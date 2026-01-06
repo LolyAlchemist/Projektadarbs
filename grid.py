@@ -70,6 +70,13 @@ class Grid:
         self.bombs = []
         self.generate_bombs()
 
+        self.bomb_answer = ""
+        self.bomb_correct = False
+        self.bomb_cell_correct = {}
+
+        
+
+
     def restart(self) -> None:
         self.grid = create_grid(SUB_GRID_SIZE)
         self.__test_grid = deepcopy(self.grid)
@@ -114,41 +121,40 @@ class Grid:
             pg.draw.line(surface, color, point[0], point[1])
 
     def __draw_numbers(self, surface) -> None:
+
         for y in range(len(self.grid)):
             for x in range(len(self.grid[y])):
+
                 if (y, x) in self.bombs:
-                    surface.blit(
-                        self.bomb_img,
-                        (x * self.cell_size + 20, y * self.cell_size + 10)
-                    )
+                    surface.blit(self.bomb_img, (x * self.cell_size + 20, y * self.cell_size + 10))
+
+                    if (y, x) in getattr(self, "bomb_cell_correct", {}):
+                        correct = self.bomb_cell_correct[(y, x)]
+                        color = (0, 255, 0) if correct else (255, 80, 80)
+                        num_surface = self.game_font.render(str(self.get_cell(x, y)), False, color)
+                        surface.blit(num_surface, (x * self.cell_size + self.num_x_offset,
+                                                y * self.cell_size + self.num_y_offset))
                     continue
 
-                if self.get_cell(x, y) != 0:
-                    if (y, x) in self.occupied_cell_coordinates:
-                        text_surface = self.game_font.render(
-                            str(self.get_cell(x, y)),
-                            False,
-                            (0, 200, 250)
-                        )
-                    else:
-                        text_surface = self.game_font.render(
-                            str(self.get_cell(x, y)),
-                            False,
-                            (126, 39, 150)
-                        )
+                cell_value = self.get_cell(x, y)
+                if cell_value == 0:
+                    continue
 
-                    if self.get_cell(x, y) != self.__test_grid[y][x]:
-                        text_surface = self.game_font.render(
-                            str(self.get_cell(x, y)),
-                            False,
-                            (255, 0, 0)
-                        )
+                if (y, x) in self.occupied_cell_coordinates:
+                    color = (0, 200, 250)
+                else:
+                    color = (126, 39, 150)
 
-                    surface.blit(
-                        text_surface,
-                        (x * self.cell_size + self.num_x_offset,
-                         y * self.cell_size + self.num_y_offset)
-                    )
+                if cell_value != self.__test_grid[y][x]:
+                    color = (255, 0, 0)
+
+                text_surface = self.game_font.render(str(cell_value), False, color)
+                surface.blit(
+                    text_surface,
+                    (x * self.cell_size + self.num_x_offset, y * self.cell_size + self.num_y_offset)
+                )
+
+
 
     def generate_bombs(self):
         bombs = []
@@ -180,9 +186,31 @@ class Grid:
         self.__draw_lines(pg, surface)
         self.__draw_numbers(surface)
         self.selection.draw(pg, surface)
+        self.bomb_feedback = ""
+        self.bomb_feedback_color = (255, 255, 255)
+
+        info_font = self.game_font
+        x = 20      
+        y = 920        
+
+        surface.blit(info_font.render("Bombs:", False, (255, 255, 255)), (x, y))
+
+        surface.blit(info_font.render("Enter bomb number:", False, (0,255,255)), (x, y + 160))
+
+        surface.blit(info_font.render(self.bomb_answer, False, (255,255,0)), (x + 280, y + 160))
+
+        if self.bomb_feedback:
+            surface.blit(info_font.render(self.bomb_feedback, False, self.bomb_feedback_color),
+                        (x, y + 210))
+
+
 
     def get_cell(self, x:int, y:int) -> int:
         return self.grid[y][x]
 
     def set_cell(self, x:int, y:int, value:int) -> None:
         self.grid[y][x] = value
+
+    def get_bomb_solutions(self):
+        return [self.__test_grid[r][c] for r, c in self.bombs]
+
