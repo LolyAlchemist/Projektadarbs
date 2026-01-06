@@ -1,5 +1,4 @@
 import pygame
-import button
 
 class Button():
     def __init__(self, x, y, image, scale):
@@ -10,14 +9,13 @@ class Button():
         self.rect.topleft = (x, y)
         self.clicked = False
 
-
-    def draw(self, surface):
-        
+    def draw(self, surface, mouse_pos=None):
         action = False
 
-        position_mouse = pygame.mouse.get_pos()
+        if mouse_pos is None:
+            mouse_pos = pygame.mouse.get_pos()
 
-        if self.rect.collidepoint(position_mouse):
+        if self.rect.collidepoint(mouse_pos):
             if pygame.mouse.get_pressed()[0] == 1 and self.clicked == False:
                 self.clicked = True
                 action = True
