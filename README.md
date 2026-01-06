@@ -1,10 +1,10 @@
 # Projekta darbs
 **Spēles koncepta realizācija izmantojot python.**
-- Sudoku x minesweeper hibrīds.
+- Sudoku ar bombām
 NOTEIKUMI:
 * Spēkā ir parastie sudoku noteikumi.
-* Zem sudoku ir teksts, kurš informē — kurā kolonnā un kurā rindā atrodas bomba.
-* Zem bombas lokācijas informācijas jāievada pareizais skaitlis, kas atbilst bombas vietai sudoku.
+* Sudoku var redzēt kur atrodas bombas.
+* Zem sudoku ir bombas cipara ievade kur jāievada pareizais skaitlis, kas atbilst bombas vietai sudoku.
 
 BOMBAS LOKĀCIJA:
 Kolonna: ____
@@ -15,7 +15,6 @@ ____
 [Trello saite](https://trello.com/invite/b/6904c20c7c267444e3a1855d/ATTIdd5374c5fd93773bf1930204bb3a7d9d4871FE63/projekta-darbs)
 
 
-Show bomb row/column below Sudoku (e.g. “Bomb 1 → Row 4, Column 2”)  
-Ask the player to type the correct hidden bomb number (you mentioned this earlier)  
-Add visual “You found the bomb!” effects (sound, text)  
-if wrong number entered, restart automatic(jump n text wrong number or some)  
+Ask the player to type the correct hidden bomb number
+Add visual “You found the bomb!”
+if not, try again.
