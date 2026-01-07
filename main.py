@@ -15,7 +15,7 @@ screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 pygame.display.set_caption("Sudoku Bombs")
 
 game_font = pygame.font.SysFont("Arial", 50) 
-game_font2 = pygame.font.SysFont("Arial", 25)
+game_font2 = pygame.font.SysFont("Arial", 20)
 
 grid = Grid(pygame, game_font)
 
@@ -43,39 +43,25 @@ while run:
         if event.type == pygame.QUIT:
             run = False
 
-        if event.type == pygame.KEYDOWN:
-
-            if event.key == pygame.K_SPACE and grid.win:
-                grid.restart()
-
-            if state == "game" and not grid.win:
-                if event.unicode.isdigit():
-                    grid.bomb_answer += event.unicode
+        if state == "game":
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_TAB:
+                    grid.active_bomb_input = (grid.active_bomb_input + 1) % 2
+                elif event.unicode.isdigit():
+                    i = grid.active_bomb_input
+                    grid.bomb_answers[i] = event.unicode
                 elif event.key == pygame.K_BACKSPACE:
-                    grid.bomb_answer = grid.bomb_answer[:-1]
+                    i = grid.active_bomb_input
+                    grid.bomb_answers[i] = ""
                 elif event.key == pygame.K_RETURN:
-                    solutions = grid.get_bomb_solutions()
-                    if grid.bomb_answer.isdigit() and int(grid.bomb_answer) in solutions:
-                        grid.bomb_feedback = "Correct!"
-                        grid.bomb_feedback_color = (0, 255, 0) # pyright: ignore[reportAttributeAccessIssue]
-                        grid.bomb_correct = True
-                        for r, c in grid.bombs:
-                            if int(grid.bomb_answer) == grid.get_cell(c, r):
-                                grid.bomb_cell_correct[(r, c)] = True
-                    else:
-                        grid.bomb_feedback = "Wrong — try again"
-                        grid.bomb_feedback_color = (255, 80, 80) # pyright: ignore[reportAttributeAccessIssue]
-                        grid.bomb_correct = False
-                        for r, c in grid.bombs:
-                            if int(grid.bomb_answer) == grid.get_cell(c, r):
-                                grid.bomb_cell_correct[(r, c)] = False
-                    grid.bomb_answer = ""
+                    grid.submit_bomb_answer()
+                elif event.key == pygame.K_SPACE and getattr(grid, "restart_allowed", False):
+                    grid.restart()
+                    grid.restart_allowed = False
 
-
-        if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
-            mouse_x, mouse_y = pygame.mouse.get_pos()
-            adjusted_mouse_y = mouse_y + scroll_offset
-            if state == "game":
+            if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+                mouse_x, mouse_y = pygame.mouse.get_pos()
+                adjusted_mouse_y = mouse_y + scroll_offset
                 grid.get_mouse_click(mouse_x, adjusted_mouse_y)
 
     scroll_offset = int(scrollbar.scroll_percent * (SCROLL_HEIGHT - SCREEN_HEIGHT))
@@ -92,13 +78,29 @@ while run:
     elif state == "game":
         scroll.fill((0, 0, 0))
         grid.draw_all(pygame, scroll)
-        if grid.win:
-            won_surface = game_font.render("Tu uzvarēji!", False, (0, 255, 0))
+
+        sudoku_complete = grid.check_grids()
+        bombs_correct = all(grid.bomb_cell_correct.get(b, False) for b in grid.bombs)
+        bombs_wrong = any(bomb in grid.bomb_cell_correct and not grid.bomb_cell_correct[bomb] for bomb in grid.bombs)
+
+        grid.restart_allowed = False
+
+        if sudoku_complete and bombs_correct:
+            grid.win = True
+            grid.restart_allowed = True
+            won_surface = game_font2.render("Tu uzvarēji!", False, (0, 255, 0))
+            press_space_surf = game_font2.render("Spied space, lai restartētu.", False, (0, 255, 200))
             scroll.blit(won_surface, (956, 650))
-            press_space_surf = game_font2.render(
-                "Spied space, lai restartētu.", False, (0, 255, 200)
-            )
-            scroll.blit(press_space_surf, (920, 750))
+            scroll.blit(press_space_surf, (920, 670))
+
+        elif bombs_wrong:
+            grid.win = False
+            grid.restart_allowed = True
+            fail_surface = game_font2.render("Kļūda bombā! Restartē.", False, (255, 0, 0))
+            press_space_surf = game_font2.render("Spied space, lai restartētu.", False, (255, 80, 80))
+            scroll.blit(fail_surface, (920, 650))
+            scroll.blit(press_space_surf, (920, 670))
+
         screen.blit(scroll, (0, -scroll_offset))
         scrollbar.draw(screen)
 
@@ -126,7 +128,6 @@ while run:
 
         mouse_pos = pygame.mouse.get_pos()
         adjusted_mouse_pos = (mouse_pos[0], mouse_pos[1] + scroll_offset)
-
         if back_button.draw(scroll, adjusted_mouse_pos):
             state = "menu"
 
