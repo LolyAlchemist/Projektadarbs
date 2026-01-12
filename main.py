@@ -21,13 +21,13 @@ grid = Grid(pygame, game_font)
 
 start_img = pygame.image.load("START_BUTTON.png").convert_alpha()
 quit_img = pygame.image.load("QUIT_BUTTON.png").convert_alpha()
-tuto_img = pygame.image.load("BACK_BUTTON.png").convert_alpha()
+tuto_img = pygame.image.load("TUT_BUTTON.png").convert_alpha()
 back_img = pygame.image.load("BACK_BUTTON.png").convert_alpha()
 
 start_button = button.Button(450, 150, start_img, 1.5)
 quit_button = button.Button(450, 300, quit_img, 1.5)
 tuto_button = button.Button(450, 450, tuto_img, 1.5)
-back_button = button.Button(450, 500, back_img, 1.5)
+back_button = button.Button(450, 650, back_img, 1.5)
 
 state = "menu"
 run = True
@@ -111,16 +111,25 @@ while run:
         text = [
             "NOTEIKUMI:",
             "* Spēkā ir parastie sudoku noteikumi.",
-            "* Zem sudoku ir teksts, kurš informē — kurā kolonnā un rindā ir bomba.",
-            "* Zem bombas lokācijas informācijas jāievada pareizais cipars.",
+            "* Spēlē ir fiksēts bombu skaits (2 bombas).",
+            "* Sudoku laukā ir redzamas bombu atrašanās vietas.",
+            "* Katrai bombai ir norādīts, vai tā ir B1 vai B2.",
             "",
-            "BOMBAS LOKĀCIJA:",
-            "Kolonna: ____",
-            "Rinda: ____",
+            "* Zem sudoku lauka ir ievades vieta bombas ciparam.",
+            "* Jāievada skaitlis no 1 līdz 9, kas atbilst bombas vietai sudoku 3x3 apakšrežģī.",
             "",
-            "PAREIZAIS CIPARS (BOMBA):",
-            "____"
+            "* Lai pārietu uz nākamo bombu (B1 vai B2), jānospiež TAB.",
+            "* Lai pārbaudītu ievadītos rezultātus, jānospiež ENTER.",
+            "",
+            "ZAUDĒJUMA NOSACĪJUMI:",
+            "* Spēle tiek zaudēta, ja tiek nospiests ENTER,",
+            "* bet viena vai abas bombu vērtības ir ievadītas nepareizi.",
+            "",
+            "UZVARAS NOSACĪJUMI:",
+            "* Spēle tiek uzvarēta, ja visi sudoku lauciņi ir aizpildīti pareizi",
+            "* un ir ievadīti pareizie cipari zem abām bombām."
         ]
+
         for line in text:
             surface = font.render(line, True, (0, 0, 0))
             scroll.blit(surface, (20, y))
