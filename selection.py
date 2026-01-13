@@ -7,8 +7,8 @@ class SelectNumber:
         self.my_font = font
         self.selected_number = 0 
 
-        self.color_selected = (126, 39, 150)
-        self.color_normal = (255,255,255)
+        self.color_selected = (0,170,255)
+        self.color_normal = (0, 0, 0)
 
         self.btn_positions = [(950,50), (1050,50),
                               (950,150), (1050,150),
@@ -25,7 +25,7 @@ class SelectNumber:
             if self.button_hover(pos):
                 pygame.draw.rect(surface, self.color_selected, [pos[0], pos[1], self.btn_w, self.btn_h], width=3, border_radius=10)
             
-                text_surface = self.my_font.render(str(index + 1), False, (126, 39, 150))
+                text_surface = self.my_font.render(str(index + 1), False, (0,170,255))
             else:
                 
                 text_surface = self.my_font.render(str(index + 1), False, self.color_normal)
