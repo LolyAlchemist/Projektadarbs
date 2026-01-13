@@ -41,7 +41,7 @@ def create_grid(sub_grid: int) -> list[list]:
 
 def remove_numbers(grid: list[list]) -> None:
     num_of_cells = GRID_SIZE * GRID_SIZE
-    empties = num_of_cells * 3 // 20 # mazaks cipars grutak, lielaks vieglaka spele
+    empties = num_of_cells * 3 // 7 # mazaks cipars grutak, lielaks vieglaka spele
     for i in sample(range(num_of_cells), empties):
         grid[i // GRID_SIZE][i % GRID_SIZE] = 0
 
@@ -67,7 +67,7 @@ class Grid:
 
         self.selection = SelectNumber(pygame, self.game_font)
 
-        self.bomb_img = pygame.image.load("bomb.png").convert_alpha()
+        self.bomb_img = pygame.image.load("Untitled45_20260113225822.png").convert_alpha()
         self.bomb_img = pygame.transform.scale(self.bomb_img, (60, 60))
         self.bombs = []
         self.generate_bombs()
@@ -77,10 +77,6 @@ class Grid:
         self.bomb_feedback = ""
         self.bomb_feedback_color = (255, 255, 255)
         self.active_bomb_input = 0
-
-
-
-        
 
 
     def restart(self) -> None:
@@ -127,9 +123,9 @@ class Grid:
     def __draw_lines(self, pg, surface) -> None:
         for index, point in enumerate(self.line_coordinates):
             if index in (3, 6, 13, 16):
-                color = (255, 255, 255)
+                color = (0, 0, 0)
             else:
-                color = (126, 39, 150)
+                color = (0,170,255)
             pg.draw.line(surface, color, point[0], point[1])
 
     def __draw_numbers(self, surface) -> None:
@@ -141,14 +137,14 @@ class Grid:
                     surface.blit(self.bomb_img, (x * self.cell_size + 20, y * self.cell_size + 10))
 
                     bomb_index = self.bombs.index((y, x))
-                    label_surface = self.game_font.render(str(bomb_index + 1), False, (204, 255, 255))
+                    label_surface = self.game_font.render(str(bomb_index + 1), False, (255,255,204))
                     surface.blit(label_surface, (x * self.cell_size + self.cell_size//2 - 10, y * self.cell_size + 5))
 
                     if (y, x) in self.bomb_cell_correct:
                         correct = self.bomb_cell_correct[(y, x)]
                         entered = self.bomb_answers[bomb_index]
                         if entered and (not correct or self.win):
-                            color = (0, 255, 0) if correct else (178, 102, 255)
+                            color = (0, 255, 0) if correct else (255, 0, 0)
                             num_surface = self.game_font.render(str(self.__test_grid[y][x]), False, color)
                             surface.blit(num_surface, (x * self.cell_size + self.num_x_offset,
                                                     y * self.cell_size + self.num_y_offset))
@@ -158,12 +154,12 @@ class Grid:
                     continue
 
                 if (y, x) in self.occupied_cell_coordinates:
-                    color = (178, 102, 255)
+                    color = (0, 0, 0)
                 else:
-                    color = (178, 102, 255)
+                    color = (0, 51, 102)
 
                 if cell_value != self.__test_grid[y][x]:
-                    color = (178, 102, 255)
+                    color = (255, 0, 0)
 
                 text_surface = self.game_font.render(str(cell_value), False, color)
                 surface.blit(
@@ -208,7 +204,6 @@ class Grid:
         except ValueError:
             self.bomb_feedback = "Ievadiet abus skaitļus!"
             self.bomb_feedback_color = (178, 102, 255)
-            self.update_restart_status()
             return
 
         correct_count = 0
@@ -243,7 +238,7 @@ class Grid:
         y = 920
 
         surface.blit(
-            info_font.render("Bombs:", False, (178, 102, 255)),
+            info_font.render("Bombs:", False, (0, 0, 0)),
             (x, y)
         )
 
@@ -293,17 +288,12 @@ class Grid:
             for b in self.bombs
         )
 
-        # Win only if Sudoku complete AND both bombs correct
         self.win = sudoku_complete and bombs_correct
 
-        # Restart allowed if either:
-        # 1. Win condition met
-        # 2. At least one bomb is guessed wrong
         any_bomb_wrong = any(
             not self.bomb_cell_correct.get(b, True)
             for b in self.bombs
             if b in self.bomb_cell_correct
         )
         self.restart_allowed = self.win or any_bomb_wrong
-
 
