@@ -19,14 +19,19 @@ game_font2 = pygame.font.SysFont("Arial", 20)
 
 grid = Grid(pygame, game_font)
 
-start_img = pygame.image.load("START_BUTTON.png").convert_alpha()
-quit_img = pygame.image.load("QUIT_BUTTON.png").convert_alpha()
-tuto_img = pygame.image.load("TUT_BUTTON.png").convert_alpha()
-back_img = pygame.image.load("BACK_BUTTON.png").convert_alpha()
+game_bg = pygame.image.load("Untitled46_20260113230129.png").convert()
+menu_bg = pygame.image.load("Untitled46_20260113230857.png").convert()
+tutorial_bg = pygame.image.load("Untitled46_20260113231143.png").convert()
+
+
+start_img = pygame.image.load("Untitled47_20260113231641.png").convert_alpha()
+quit_img = pygame.image.load("Untitled47_20260113231702.png").convert_alpha()
+tuto_img = pygame.image.load("Untitled47_20260113231721.png").convert_alpha()
+back_img = pygame.image.load("Untitled47_20260113231823.png").convert_alpha()
 
 start_button = button.Button(450, 150, start_img, 1.5)
-quit_button = button.Button(450, 300, quit_img, 1.5)
-tuto_button = button.Button(450, 450, tuto_img, 1.5)
+quit_button = button.Button(450, 450, quit_img, 1.5)
+tuto_button = button.Button(450, 300, tuto_img, 1.5)
 back_button = button.Button(450, 650, back_img, 1.5)
 
 state = "menu"
@@ -67,7 +72,7 @@ while run:
     scroll_offset = int(scrollbar.scroll_percent * (SCROLL_HEIGHT - SCREEN_HEIGHT))
 
     if state == "menu":
-        screen.fill((202, 228, 241))
+        screen.blit(menu_bg, (0, 0))
         if start_button.draw(screen):
             state = "game"
         if tuto_button.draw(screen):
@@ -76,7 +81,7 @@ while run:
             run = False
 
     elif state == "game":
-        scroll.fill((0, 0, 0))
+        scroll.blit(game_bg, (0, 0))
         grid.draw_all(pygame, scroll)
 
         sudoku_complete = grid.check_grids()
@@ -105,30 +110,31 @@ while run:
         scrollbar.draw(screen)
 
     elif state == "tutorial":
-        scroll.fill((255, 255, 255))
+        scroll.blit(tutorial_bg, (0, 0))
         y = 20
         font = pygame.font.SysFont("Arial", 25)
         text = [
-            "NOTEIKUMI:",
-            "* Spēkā ir parastie sudoku noteikumi.",
-            "* Spēlē ir fiksēts bombu skaits (2 bombas).",
-            "* Sudoku laukā ir redzamas bombu atrašanās vietas.",
-            "* Katrai bombai ir norādīts, vai tā ir B1 vai B2.",
-            "",
-            "* Zem sudoku lauka ir ievades vieta bombas ciparam.",
-            "* Jāievada skaitlis no 1 līdz 9, kas atbilst bombas vietai sudoku 3x3 apakšrežģī.",
-            "",
-            "* Lai pārietu uz nākamo bombu (B1 vai B2), jānospiež TAB.",
-            "* Lai pārbaudītu ievadītos rezultātus, jānospiež ENTER.",
-            "",
-            "ZAUDĒJUMA NOSACĪJUMI:",
-            "* Spēle tiek zaudēta, ja tiek nospiests ENTER,",
-            "* bet viena vai abas bombu vērtības ir ievadītas nepareizi.",
-            "",
-            "UZVARAS NOSACĪJUMI:",
-            "* Spēle tiek uzvarēta, ja visi sudoku lauciņi ir aizpildīti pareizi",
-            "* un ir ievadīti pareizie cipari zem abām bombām."
-        ]
+    "NOTEIKUMI:",
+    "* Spēkā ir parastie sudoku noteikumi.",
+    "* Spēlē ir fiksēts bumbu skaits (2 bumbas).",
+    "* Sudoku laukā ir redzamas bumbu atrašanās vietas.",
+    "* Katrai bumbai ir norādīts, vai tā ir B1 vai B2.",
+    "",
+    "* Zem sudoku lauka ir ievades vieta bumbu ciparam.",
+    "* Jāievada skaitlis no 1 līdz 9, kas atbilst bumbas vietai sudoku 3x3 apakšrežģī.",
+    "",
+    "* Lai pārietu uz nākamo bumbu (B1 vai B2), jānospiež TAB.",
+    "* Lai pārbaudītu ievadītos rezultātus, jānospiež ENTER.",
+    "",
+    "ZAUDĒJUMA NOSACĪJUMI:",
+    "* Spēle tiek zaudēta, ja tiek nospiests ENTER,",
+    "* bet viena vai abas bumbu vērtības ir ievadītas nepareizi.",
+    "",
+    "UZVARAS NOSACĪJUMI:",
+    "* Spēle tiek uzvarēta, ja visi sudoku lauciņi ir aizpildīti pareizi",
+    "* un ir ievadīti pareizie cipari zem abām bumbām."
+]
+
 
         for line in text:
             surface = font.render(line, True, (0, 0, 0))
