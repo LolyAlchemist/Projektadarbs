@@ -20,19 +20,19 @@ game_font2 = pygame.font.SysFont("Arial", 20)
 grid = Grid(pygame, game_font)
 
 game_bg = pygame.image.load("Untitled46_20260113230129.png").convert()
-menu_bg = pygame.image.load("Untitled46_20260113230857.png").convert()
-tutorial_bg = pygame.image.load("Untitled46_20260113231143.png").convert()
+menu_bg = pygame.image.load("menu.png").convert()
+tutorial_bg = pygame.image.load("noteik.png").convert()
 
 
-start_img = pygame.image.load("Untitled47_20260113231641.png").convert_alpha()
-quit_img = pygame.image.load("Untitled47_20260113231702.png").convert_alpha()
-tuto_img = pygame.image.load("Untitled47_20260113231721.png").convert_alpha()
-back_img = pygame.image.load("Untitled47_20260113231823.png").convert_alpha()
+start_img = pygame.image.load("spele.png").convert_alpha()
+quit_img = pygame.image.load("iziet.png").convert_alpha()
+tuto_img = pygame.image.load("noteikumi.png").convert_alpha()
+back_img = pygame.image.load("atpakal.png").convert_alpha()
 
-start_button = button.Button(450, 150, start_img, 1.5)
-quit_button = button.Button(450, 450, quit_img, 1.5)
-tuto_button = button.Button(450, 300, tuto_img, 1.5)
-back_button = button.Button(450, 650, back_img, 1.5)
+start_button = button.Button(450, 150, start_img, 2)
+quit_button = button.Button(450, 450, quit_img, 2)
+tuto_button = button.Button(450, 300, tuto_img, 2)
+back_button = button.Button(450, 650, back_img, 2)
 
 state = "menu"
 run = True
