@@ -12,7 +12,7 @@ SCREEN_HEIGHT = 1200
 SCROLL_HEIGHT = 1400
 
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
-pygame.display.set_caption("Sudoku Bombs")
+pygame.display.set_caption("Sudoku ar bumbām")
 
 game_font = pygame.font.SysFont("Arial", 50) 
 game_font2 = pygame.font.SysFont("Arial", 20)
