@@ -2,7 +2,7 @@ import pygame
 
 class ScrollBar:
     def __init__(self, x, y, h, thumb_h=120,
-                 thumb_color=(255, 255, 255)):
+                 thumb_color=(0, 0, 0)):
         self.x = x
         self.y = y
         self.h = h
