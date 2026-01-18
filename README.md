@@ -21,7 +21,7 @@ Noteikumi:
 
 Zaudējuma nosacijumi: 
 
-*Spēle tiek zaudēta, ja tiek nospiests ENTER taustiņš, bet viena vai abas bumbu vērtības ir ievadītas nepareizi. 
+*Spēle tiek zaudēta, ja nav ieavadītas bumbas, abas vai viena ir nepareiza. 
 
 Uzvaras nosacijumi: 
 
